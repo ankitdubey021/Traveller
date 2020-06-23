@@ -100,11 +100,6 @@ fun PostCardPopular(post: Place, modifier: Modifier = Modifier) {
     }
 }
 
-@Preview()
-@Composable
-fun PreviewPostCardPopular() {
-    PostCardPopular(post = Place(1, "sdf", "dsf", "df",""))
-}
 
 @Composable
 fun loadPicture(url: String): UiState<Bitmap> {

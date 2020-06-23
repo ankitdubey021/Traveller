@@ -3,6 +3,7 @@ package com.ankitdubey021.traveller.ui.detail
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.nfc.Tag
 import androidx.compose.Composable
 import androidx.compose.getValue
 import androidx.compose.setValue
@@ -13,6 +14,8 @@ import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.*
 import androidx.ui.foundation.R
+import androidx.ui.foundation.shape.corner.RoundedCornerShape
+import androidx.ui.graphics.Color
 import androidx.ui.graphics.asImageAsset
 import androidx.ui.layout.*
 import androidx.ui.layout.RowScope.weight
@@ -22,10 +25,14 @@ import androidx.ui.material.icons.filled.ArrowBack
 import androidx.ui.material.icons.filled.BlurCircular
 import androidx.ui.material.icons.filled.FavoriteBorder
 import androidx.ui.material.icons.filled.Share
+import androidx.ui.material.ripple.ripple
 import androidx.ui.res.vectorResource
+import androidx.ui.text.style.TextOverflow
 import androidx.ui.unit.dp
 import com.ankitdubey021.imagedemo.utils.UiState
 import com.ankitdubey021.traveller.model.Place
+import com.ankitdubey021.traveller.ui.LightBlue
+import com.ankitdubey021.traveller.ui.Pink
 import com.ankitdubey021.traveller.ui.Screen
 import com.ankitdubey021.traveller.ui.home.loadPicture
 import com.ankitdubey021.traveller.ui.navigateTo
@@ -33,10 +40,7 @@ import com.ankitdubey021.traveller.ui.navigateTo
 @Composable
 fun DetailScreen(place: Place){
     val loadPictureState = loadPicture("https://source.unsplash.com/${place.imageUrl}/640x426")
-    var showDialog by state { false }
-    if (showDialog) {
-        FunctionalityNotAvailablePopup { showDialog = false }
-    }
+    val context = ContextAmbient.current
     Scaffold(
             topAppBar = {
                 TopAppBar(
@@ -45,11 +49,18 @@ fun DetailScreen(place: Place){
                             IconButton(onClick = { navigateTo(Screen.Home)}) {
                                 Icon(Icons.Default.ArrowBack)
                             }
+                        },
+                        actions = {
+                            IconButton(onClick = { sharePost(place, context) }) {
+                                Icon(Icons.Filled.Share)
+                            }
                         }
                 )
             },
             bodyContent = { _ ->
-                VerticalScroller() {
+                VerticalScroller(
+                        modifier = Modifier.padding(bottom = 50.dp)
+                ) {
                     Column {
                         if (loadPictureState is UiState.Success<Bitmap>)
                             Image(
@@ -68,55 +79,75 @@ fun DetailScreen(place: Place){
                             ){
                                 Icon(Icons.Default.BlurCircular)
                             }
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Text(
+                                text = place.body,
+                                style = MaterialTheme.typography.body1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.padding(8.dp)
+                        )
+
+                        if(place.tag.isNotEmpty())
+                            HomeScreenPopularSection(tags = place.tag)
 
                     }
                 }
 
-            },
-        bottomAppBar = {
-            BottomBar(place) { showDialog = true }
-        }
+            }
     )
 }
-@Composable
-private fun BottomBar(post: Place, onUnimplementedAction: () -> Unit) {
-    Surface(elevation = 2.dp) {
-        Row(
-            verticalGravity = Alignment.CenterVertically,
-            modifier = Modifier
-                .preferredHeight(56.dp)
-                .fillMaxWidth()
-        ) {
-            IconButton(onClick = onUnimplementedAction) {
-                Icon(Icons.Filled.FavoriteBorder)
-            }
 
-            val context = ContextAmbient.current
-            IconButton(onClick = { sharePost(post, context) }) {
-                Icon(Icons.Filled.Share)
-            }
-            Spacer(modifier = Modifier.weight(1f))
+
+@Composable
+private fun HomeScreenPopularSection(tags: List<String>) {
+    Column {
+        ProvideEmphasis(EmphasisAmbient.current.high) {
+            Text(
+                    modifier = Modifier.padding(
+                            top = 16.dp,bottom = 8.dp, start = 16.dp
+                    ),
+                    text = "See also",
+                    style = MaterialTheme.typography.subtitle1
+            )
         }
+        HorizontalScroller {
+            Row(modifier = Modifier.padding(end = 16.dp, bottom = 16.dp)) {
+                tags.forEach { str ->
+                    TagBox(str)
+                }
+            }
+        }
+        HomeScreenDivider()
+    }
+}
+
+
+@Composable
+fun TagBox(title : String) {
+    Box(
+            modifier = Modifier.padding(8.dp),
+            shape = RoundedCornerShape(12.dp, 0.dp, 12.dp, 0.dp),
+            backgroundColor = Pink
+    ) {
+        Text(
+                text = title,
+                modifier = Modifier.padding(
+                        top = 8.dp,bottom = 8.dp,
+                        start = 16.dp,end = 16.dp
+                ),
+                color = Color.White
+        )
     }
 }
 
 @Composable
-private fun FunctionalityNotAvailablePopup(onDismiss: () -> Unit) {
-    AlertDialog(
-        onCloseRequest = onDismiss,
-        text = {
-            Text(
-                text = "Functionality not available \uD83D\uDE48",
-                style = MaterialTheme.typography.body2
-            )
-        },
-        confirmButton = {
-            TextButton(onClick = onDismiss) {
-                Text(text = "CLOSE")
-            }
-        }
+private fun HomeScreenDivider() {
+    Divider(
+            modifier = Modifier.padding(horizontal = 14.dp),
+            color = MaterialTheme.colors.onSurface.copy(alpha = 0.08f)
     )
 }
+
 
 private fun sharePost(post: Place, context: Context) {
     val intent = Intent(Intent.ACTION_SEND).apply {

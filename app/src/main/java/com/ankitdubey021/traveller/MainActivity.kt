@@ -16,6 +16,8 @@ import com.ankitdubey021.traveller.ui.navigateTo
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
         setContent {
             MovieComposerTheme {
                 Crossfade(mutableState) { screen ->

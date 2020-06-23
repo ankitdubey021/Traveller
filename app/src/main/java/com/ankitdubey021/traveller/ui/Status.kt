@@ -10,6 +10,8 @@ sealed class Screen {
 
 val mutableState = mutableStateOf<Screen>(Screen.Home)
 
+
+
 fun navigateTo(destination: Screen) {
     mutableState.value=destination
 }

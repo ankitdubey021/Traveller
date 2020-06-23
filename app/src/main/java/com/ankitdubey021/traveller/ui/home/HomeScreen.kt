@@ -39,11 +39,6 @@ fun HomeScreen() {
             topAppBar = {
                 TopAppBar(
                         title = { Text(text = "Traveller") }
-                        /*navigationIcon = {
-                            IconButton(onClick = { navigateTo(Screen.Home)}) {
-                                Icon(Icons.Default.ArrowBack)
-                            }
-                        }*/
                 )
             },
             bodyContent = { _ ->
@@ -54,22 +49,22 @@ fun HomeScreen() {
 }
 
 @Composable
-fun fetchMovies(){
+fun fetchMovies() {
 
     val movies = state { listOf<Place>() }
 
-    if(movies.value.isEmpty()) {
+    if (movies.value.isEmpty()) {
         GlobalScope.launch {
             val list = MovieNetwork.api.getPosts()
-            if(list.isSuccessful && !list.body().isNullOrEmpty()){
-                GlobalScope.launch(Dispatchers.Main){
-                    movies.value= list.body()!!
+            if (list.isSuccessful && !list.body().isNullOrEmpty()) {
+                GlobalScope.launch(Dispatchers.Main) {
+                    movies.value = list.body()!!
+                    println("::::::::::;${list.body()}")
                 }
             }
         }
         LoadingScreen()
-    }
-    else{
+    } else {
         VerticalScroller {
             Column {
                 movies.value.forEach {
@@ -79,6 +74,7 @@ fun fetchMovies(){
         }
     }
 }
+
 
 
 
