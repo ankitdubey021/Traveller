@@ -11,6 +11,7 @@ import com.ankitdubey021.traveller.ui.Screen
 import com.ankitdubey021.traveller.ui.detail.DetailScreen
 import com.ankitdubey021.traveller.ui.home.HomeScreen
 import com.ankitdubey021.traveller.ui.mutableState
+import com.ankitdubey021.traveller.ui.navigateTo
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,11 +22,19 @@ class MainActivity : AppCompatActivity() {
                         Surface(color = MaterialTheme.colors.background) {
                             when (screen.value) {
                                 is Screen.Home -> HomeScreen()
-                                is Screen.Detail -> DetailScreen((screen.value as Screen.Detail).postId)
+                                is Screen.Detail -> DetailScreen((screen.value as Screen.Detail).place)
                             }
                         }
                 }
             }
+        }
+    }
+
+    override fun onBackPressed() {
+        if (mutableState.value != Screen.Home) {
+            navigateTo(Screen.Home)
+        } else {
+            super.onBackPressed()
         }
     }
 }

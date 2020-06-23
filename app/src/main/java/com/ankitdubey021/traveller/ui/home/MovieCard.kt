@@ -33,7 +33,7 @@ import androidx.ui.material.EmphasisAmbient
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ProvideEmphasis
 import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.Refresh
+import androidx.ui.material.icons.filled.BlurCircular
 import androidx.ui.material.ripple.ripple
 import androidx.ui.text.style.TextOverflow
 import androidx.ui.tooling.preview.Preview
@@ -42,12 +42,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.ankitdubey021.imagedemo.utils.UiState
-import com.ankitdubey021.traveller.model.Movie
+import com.ankitdubey021.traveller.model.Place
 import com.ankitdubey021.traveller.ui.Screen
 import com.ankitdubey021.traveller.ui.navigateTo
 
 @Composable
-fun PostCardPopular(post: Movie, modifier: Modifier = Modifier) {
+fun PostCardPopular(post: Place, modifier: Modifier = Modifier) {
 
     val loadPictureState = loadPicture("https://source.unsplash.com/${post.imageUrl}/640x426")
 
@@ -55,7 +55,7 @@ fun PostCardPopular(post: Movie, modifier: Modifier = Modifier) {
         shape = MaterialTheme.shapes.medium,
         modifier = Modifier.fillMaxWidth().padding(16.dp)) {
         Box(Modifier.ripple().clickable(onClick = {
-            navigateTo(Screen.Detail(postId = post.id))
+            navigateTo(Screen.Detail(place = post))
         }
                 //onClick = { navigateTo(Screen.Article(post.id)) }
         ), children = {
@@ -75,7 +75,7 @@ fun PostCardPopular(post: Movie, modifier: Modifier = Modifier) {
                             paddingStart = 150.dp,
                             paddingEnd = 150.dp
                     ){
-                        Icon(Icons.Default.Refresh)
+                        Icon(Icons.Default.BlurCircular)
                     }
 
                 Column(modifier = Modifier.padding(16.dp)) {
@@ -103,7 +103,7 @@ fun PostCardPopular(post: Movie, modifier: Modifier = Modifier) {
 @Preview()
 @Composable
 fun PreviewPostCardPopular() {
-    PostCardPopular(post = Movie(1, "sdf", "dsf", "df",""))
+    PostCardPopular(post = Place(1, "sdf", "dsf", "df",""))
 }
 
 @Composable

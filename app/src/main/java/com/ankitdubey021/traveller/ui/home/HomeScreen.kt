@@ -23,11 +23,12 @@ import androidx.ui.foundation.Text
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.Column
 import androidx.ui.layout.padding
-import androidx.ui.material.*
+import androidx.ui.material.Scaffold
+import androidx.ui.material.TopAppBar
 import androidx.ui.unit.dp
-import com.creativeitem.academy.latest.network.MovieNetwork
-import com.ankitdubey021.traveller.model.Movie
+import com.ankitdubey021.traveller.model.Place
 import com.ankitdubey021.traveller.widget.LoadingScreen
+import com.creativeitem.academy.latest.network.MovieNetwork
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -55,7 +56,7 @@ fun HomeScreen() {
 @Composable
 fun fetchMovies(){
 
-    val movies = state { listOf<Movie>() }
+    val movies = state { listOf<Place>() }
 
     if(movies.value.isEmpty()) {
         GlobalScope.launch {

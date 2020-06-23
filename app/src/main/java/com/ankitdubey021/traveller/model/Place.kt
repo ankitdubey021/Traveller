@@ -1,6 +1,6 @@
 package com.ankitdubey021.traveller.model
 
-data class Movie(
+data class Place(
     val id : Int,
     val title : String,
     val body : String,
