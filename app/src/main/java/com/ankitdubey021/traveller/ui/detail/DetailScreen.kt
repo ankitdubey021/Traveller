@@ -31,11 +31,8 @@ import androidx.ui.text.style.TextOverflow
 import androidx.ui.unit.dp
 import com.ankitdubey021.imagedemo.utils.UiState
 import com.ankitdubey021.traveller.model.Place
-import com.ankitdubey021.traveller.ui.LightBlue
-import com.ankitdubey021.traveller.ui.Pink
-import com.ankitdubey021.traveller.ui.Screen
+import com.ankitdubey021.traveller.ui.*
 import com.ankitdubey021.traveller.ui.home.loadPicture
-import com.ankitdubey021.traveller.ui.navigateTo
 
 @Composable
 fun DetailScreen(place: Place){
@@ -127,7 +124,7 @@ fun TagBox(title : String) {
     Box(
             modifier = Modifier.padding(8.dp),
             shape = RoundedCornerShape(12.dp, 0.dp, 12.dp, 0.dp),
-            backgroundColor = Pink
+            backgroundColor = colGray
     ) {
         Text(
                 text = title,
